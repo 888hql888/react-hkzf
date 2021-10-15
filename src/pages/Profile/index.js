@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class News extends Component {
+export default class Profile extends Component {
     render() {
         return (
             <div>
-                News组件
+                Profile组件
             </div>
         )
     }

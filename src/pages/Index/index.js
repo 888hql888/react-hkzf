@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class News extends Component {
+export default class Index extends Component {
     render() {
         return (
             <div>
-                News组件
+                首页组件
             </div>
         )
     }
