@@ -9,9 +9,9 @@ function App() {
       <div className="App">
         {/* 配置路由 */}
         {/* Home 组件是父路由的内容 */}
+        <Route path="/" exact render={() => <Redirect to="/home" />} />
         <Route path="/home" component={Home} />
         <Route path="/citylist" component={CityList} />
-        <Redirect  to="/home" />
       </div>
     </Router>
   );

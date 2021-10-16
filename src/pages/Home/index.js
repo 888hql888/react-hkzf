@@ -12,12 +12,12 @@ import './index.css'
 export default class Home extends Component {
 
     state = {
-      selectedTab:'/home/index',// 设置选中的selectedTab
+      selectedTab:this.props.location.pathname,// 设置选中的selectedTab
       tabBarArr:[
         {
           title: '首页',
           icon: 'icon-ind',
-          path: '/home/index'
+          path: '/home'
         },
         {
           title: '找房',
@@ -63,7 +63,8 @@ export default class Home extends Component {
         return (
           <div className='home'>
             {/* 设置tabbar的嵌套路由 */}
-            <Route path='/home/index' component={Index} />
+            {/* 使用ecact精准查询 react默认是模糊匹配 */}
+            <Route exact path='/home' component={Index} /> 
             <Route path='/home/list' component={List} />
             <Route path='/home/news' component={News} />
             <Route path='/home/profile' component={Profile} />
