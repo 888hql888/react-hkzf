@@ -12,6 +12,7 @@ import Nav4 from '../../assets/images/nav-4.png'
 
 // 导入样式文件
 import './index.scss'
+import {BaiduMapInit} from '../../utils/Bdmap'
 
 // 导航菜单数据
 const navs = [
@@ -133,25 +134,14 @@ export default class Index extends Component {
             </Flex.Item>
         )
     }
-    //解决BMap 没有注入windos问题 初始化百度api
-    MP() {
-        return new Promise(function(resolve, reject) {
-        var script = document.createElement('script')
-        const ak = '4OPF8BvrpGO71PV5vDodVQWbSU1GYiNU'
-        script.type = 'text/javascript'
-        script.src = `http://api.map.baidu.com/api?v=2.0&ak=${ak}&callback=init`;
-        document.head.appendChild(script)
-        window.init = () => {
-            resolve(window.BMap)
-        }
-        })
-    }
+   
     // 调用api得到城市 并查询接口
     getLocalCity(){
         //调用百度地图api
-        this.MP().then(BMap=>{
+        BaiduMapInit().then(BMap=>{
             const curCity = new window.BMap.LocalCity()
             curCity.get(async res => {
+                console.log(res,'res....')
                 const result = await axios.get(
                     `http://localhost:8080/area/info?name=${res.name}`
                   )
