@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import  './index.scss'
-import {BaiduMapInit} from '../../utils/Bdmap'
+import {BaiduMapInit} from '@/utils/Bdmap'
 export default class Map extends Component {
     componentDidMount(){
         BaiduMapInit().then(BMap=>{

@@ -5,14 +5,14 @@ import axios from 'axios'
 
 
 // 导入导航菜单图片
-import Nav1 from '../../assets/images/nav-1.png'
-import Nav2 from '../../assets/images/nav-2.png'
-import Nav3 from '../../assets/images/nav-3.png'
-import Nav4 from '../../assets/images/nav-4.png'
+import Nav1 from '@/assets/images/nav-1.png'
+import Nav2 from '@/assets/images/nav-2.png'
+import Nav3 from '@/assets/images/nav-3.png'
+import Nav4 from '@/assets/images/nav-4.png'
 
 // 导入样式文件
 import './index.scss'
-import {BaiduMapInit} from '../../utils/Bdmap'
+import {BaiduMapInit} from '@/utils/Bdmap'
 
 // 导航菜单数据
 const navs = [
