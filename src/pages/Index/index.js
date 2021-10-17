@@ -48,7 +48,8 @@ export default class Index extends Component {
         imgHeight: 220,
         swiperArr: [],
         groups: [],
-        news: []
+        news: [],
+        curCityName: ""
     }
     async getSweipers() {
         const res = await axios.get('http://localhost:8080/home/swiper')
@@ -81,7 +82,6 @@ export default class Index extends Component {
             news: res.data.body
         })
     }
-
     // 渲染最新资讯
     renderNews() {
         return this.state.news.map(item => (
@@ -133,10 +133,40 @@ export default class Index extends Component {
             </Flex.Item>
         )
     }
+    //解决BMap 没有注入windos问题 初始化百度api
+    MP() {
+        return new Promise(function(resolve, reject) {
+        var script = document.createElement('script')
+        const ak = '4OPF8BvrpGO71PV5vDodVQWbSU1GYiNU'
+        script.type = 'text/javascript'
+        script.src = `http://api.map.baidu.com/api?v=2.0&ak=${ak}&callback=init`;
+        document.head.appendChild(script)
+        window.init = () => {
+            resolve(window.BMap)
+        }
+        })
+    }
+    // 调用api得到城市 并查询接口
+    getLocalCity(){
+        //调用百度地图api
+        this.MP().then(BMap=>{
+            const curCity = new window.BMap.LocalCity()
+            curCity.get(async res => {
+                const result = await axios.get(
+                    `http://localhost:8080/area/info?name=${res.name}`
+                  )
+                  this.setState({
+                    curCityName: result.data.body.label
+                  })
+        })
+        });
+    }
     componentDidMount() {
         this.getSweipers()
         this.getGroups()
         this.getNews()
+        this.getLocalCity()
+        
 
     }
     render() {
@@ -163,7 +193,7 @@ export default class Index extends Component {
                                 className="location"
                                 onClick={() => this.props.history.push('/citylist')}
                             >
-                                <span className="name">上海</span>
+                                <span className="name">{this.state.curCityName}</span>
                                 <i className="iconfont icon-arrow" />
                             </div>
 
@@ -184,13 +214,13 @@ export default class Index extends Component {
                     </Flex>
                 </div>
                 {/* 轮播图 end*/}
-                
+
                 {/* item 导航跳转区域 start*/}
                 <Flex className='Nav'>
                     {this.renderNavs()}
                 </Flex>
                 {/* item 导航跳转区域 end*/}
-                
+
                 {/* 租房小组 start*/}
                 <div className='rentGroup'>
                     <WingBlank>

@@ -10,7 +10,16 @@ body {
   box-sizing: border-box;
   /* 去掉 轮播图 Chrome浏览器的错误警告 */
   touch-action: pan-y;
-}
-h2,h3,h4,p {
   margin: 0;
+  padding: 0;
+}
+
+
+
+
+html,
+body,
+#root,
+.App {
+  height: 100%;
 }
