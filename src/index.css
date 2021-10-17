@@ -11,6 +11,6 @@ body {
   /* 去掉 轮播图 Chrome浏览器的错误警告 */
   touch-action: pan-y;
 }
-h2 {
+h2,h3,h4,p {
   margin: 0;
 }
