@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { NavBar, Icon } from 'antd-mobile';
 import './index.scss'
 import axios from 'axios'
+import {getCityLocation} from '@/utils/Bdmap'
 
 export default class CityList extends Component {
     state = {
@@ -38,6 +39,17 @@ export default class CityList extends Component {
         CityData['hot'] = hotRes.data.body
         // 将索引添加到 cityIndex 中
         CityIndex.unshift('hot')
+
+        // 获取定位城市 
+        let  cityLocation = []
+        getCityLocation().then(res => {
+            cityLocation = [res]
+            CityData['#'] = cityLocation
+            CityIndex.unshift('#')
+        }).catch(err=>{
+            console.log(err,'err')
+        })
+        console.log(CityData,CityIndex,'CityIndex CityIndex')
         
     }
 

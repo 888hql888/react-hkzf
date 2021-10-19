@@ -12,7 +12,7 @@ import Nav4 from '@/assets/images/nav-4.png'
 
 // 导入样式文件
 import './index.scss'
-import {BaiduMapInit} from '@/utils/Bdmap'
+import {getCityLocation} from '@/utils/Bdmap'
 
 // 导航菜单数据
 const navs = [
@@ -137,19 +137,14 @@ export default class Index extends Component {
    
     // 调用api得到城市 并查询接口
     getLocalCity(){
-        //调用百度地图api
-        BaiduMapInit().then(BMap=>{
-            const curCity = new window.BMap.LocalCity()
-            curCity.get(async res => {
-                console.log(res,'res....')
-                const result = await axios.get(
-                    `http://localhost:8080/area/info?name=${res.name}`
-                  )
-                  this.setState({
-                    curCityName: result.data.body.label
-                  })
+        //获取定位城市 如果查询不匹配接口会返回 上海
+        getCityLocation().then(res => {
+            this.setState({
+                curCityName:res
+            })
+        }).catch(err=>{
+            console.log(err,'err')
         })
-        });
     }
     componentDidMount() {
         this.getSweipers()
