@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon,Toast } from 'antd-mobile';
 import './index.scss'
 import axios from 'axios'
 import { getCityLocation } from '@/utils/Bdmap'
@@ -7,6 +7,8 @@ import { AutoSizer, List } from 'react-virtualized';
 
 const TITLE_HEIGHT = 36
 const CITY_HEIGHT = 50
+const HOUSE_CITY = ['北京', '上海', '广州', '深圳']
+
 export default class CityList extends Component {
     constructor(props){
         super(props)
@@ -66,7 +68,7 @@ export default class CityList extends Component {
             <div key={key} style={style} className="city">
                 <div className="title">{this.formatCityIndex(letter)}</div>
                 {CityData[letter].map(item => (
-                    <div className="name" key={item.value}>
+                    <div className="name" key={item.value} onClick={()=>this.changeCity(item)}>
                         {item.label}
                     </div>
                 ))}
@@ -130,6 +132,17 @@ export default class CityList extends Component {
                 activeIndex:startIndex
             })
         }
+    }
+
+    // 改变定位📌城市
+    changeCity({value,label}){
+        if (HOUSE_CITY.indexOf(label) > -1) {
+            // 有
+            localStorage.setItem('hkzf_city', JSON.stringify({ label, value }))
+            this.props.history.go(-1)
+          } else {
+            Toast.info('该城市暂无房源数据', 1, null, false)
+          }
     }
     
 

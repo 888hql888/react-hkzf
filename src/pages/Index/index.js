@@ -140,7 +140,7 @@ export default class Index extends Component {
         //获取定位城市 如果查询不匹配接口会返回 上海
         getCityLocation().then(res => {
             this.setState({
-                curCityName:res
+                curCityName:res.label
             })
         }).catch(err=>{
             console.log(err,'err')

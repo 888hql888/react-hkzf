@@ -31,7 +31,7 @@ export const getCityLocation = () => {
                         )
                         if (result.data.status === 200) {
                             resolve(result.data.body.label)
-                            localStorage.setItem('hkzf_city',JSON.stringify(result.data.body.label))
+                            localStorage.setItem('hkzf_city',JSON.stringify(result.data.body))
                         }
                     })
                 } catch (err) {
