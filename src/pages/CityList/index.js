@@ -8,10 +8,16 @@ import { AutoSizer, List } from 'react-virtualized';
 const TITLE_HEIGHT = 36
 const CITY_HEIGHT = 50
 export default class CityList extends Component {
-    state = {
-        CityData: {}, //存储 城市数据 A:['安徽','安庆']
-        CityIndex: [] //存储 城市索引 ['a','b']
+    constructor(props){
+        super(props)
+        this.state = {
+            CityData: {}, //存储 城市数据 A:['安徽','安庆']
+            CityIndex: [], //存储 城市索引 ['a','b']
+            activeIndex:0
+        }
+        this.listRef = React.createRef()
     }
+    
     // 处理城市数据的方法
     handleCityList(list = []) {
         if (list.length == 0) return
@@ -28,8 +34,10 @@ export default class CityList extends Component {
             CityData
         }
     }
-    componentDidMount() {
-        this.getCityList()
+    async componentDidMount() {
+        await this.getCityList()
+        // ps:注意📢 此实例方法必须在获取城市数据才能调用 否则报错 所以使用 await 保证城市数据先拿到
+        this.listRef.current.measureAllRows()
     }
     // 处理标题 首字母
     formatCityIndex = (letter) => {
@@ -85,7 +93,6 @@ export default class CityList extends Component {
         CityData['hot'] = hotRes.data.body
         // 将索引添加到 cityIndex 中
         CityIndex.unshift('hot')
-
         // 获取定位城市 
         let cityLocation = []
         let result = await getCityLocation()
@@ -98,6 +105,33 @@ export default class CityList extends Component {
             CityIndex
         })
     }
+    renderCityIndex() {
+        // 获取到 cityIndex，并遍历其，实现渲染
+        const { CityIndex, activeIndex } = this.state
+        return CityIndex.map((item, index) => (
+          <li className="city-index-item" key={item} onClick={()=>{
+              //点击序号 让List 组件滚动到对应的 行( 但是默认不是滚动到顶部 需要设置属性滚动到顶部)
+              // ps:调用List组件实例scrollToRow方法 只能滚动当前可视区域的行 定位才准确 当点击后续看不见的行 x y z这些行时 
+              // 需要在 componentDidMount 钩子调用List实例的 measureAllRows 提前计算好 那些 暂时看不见的高度 确保定位的准确性
+              this.listRef.current.scrollToRow(index) 
+          }}>
+            <span className={activeIndex == index ? 'index-active' : ''}>
+              {item === 'hot' ? '热' : item.toUpperCase()}
+            </span>
+          </li>
+        ))
+      }
+    // 滚动时触发该函数 并拿到顶部的索引
+    onRowsRendered = ({startIndex}) => {
+        // 判断当前 startIndex 和 activeIndex是否相等 ，应该在不等的时候进行赋值
+        // ps:这样可以避免 setState一直调用 进而一直更新render函数 造成严重性能浪费
+        if(startIndex!=this.state.activeIndex){
+            this.setState({
+                activeIndex:startIndex
+            })
+        }
+    }
+    
 
     render() {
         return (
@@ -113,14 +147,19 @@ export default class CityList extends Component {
                 <AutoSizer>
                     {({ height, width }) => (
                         <List
+                            ref = {this.listRef}
                             width={width}
                             height={height}
                             rowCount={this.state.CityIndex.length}
                             rowHeight={this.getRowHeight}
                             rowRenderer={this.rowRenderer}
+                            onRowsRendered={this.onRowsRendered}
+                            scrollToAlignment="start"
                         />
                     )}
                 </AutoSizer>
+                {/* 右侧虚拟列表 */}
+                <ul className="city-index">{this.renderCityIndex()}</ul>
             </div>
         )
     }

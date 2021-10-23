@@ -31,4 +31,31 @@
       cursor: pointer;
     }
   }
+   // 右侧索引
+   .city-index {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    right: 5px;
+    z-index: 1;
+    height: 90%;
+    box-sizing: border-box;
+    padding-top: 10px;
+    text-align: center;
+
+    .city-index-item {
+      flex: 1;
+    }
+
+    .index-active {
+      color: #fff;
+      background-color: #21b97a;
+      border-radius: 100%;
+      display: inline-block;
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+    }
+  }
 }
