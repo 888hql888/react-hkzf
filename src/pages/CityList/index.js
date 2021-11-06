@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { NavBar, Icon,Toast } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 import './index.scss'
 import axios from 'axios'
 import { getCityLocation } from '@/utils/Bdmap'
 import { AutoSizer, List } from 'react-virtualized';
+import NavHeader from '@/components/NavHeader'
 
 const TITLE_HEIGHT = 36
 const CITY_HEIGHT = 50
@@ -149,12 +150,13 @@ export default class CityList extends Component {
     render() {
         return (
             <div className='cityList'>
-                <NavBar
+                {/* <NavBar
                     mode="light"
                     icon={<Icon type="left" />}
                     onLeftClick={() => this.props.history.go(-1)}
                     className='navBar'
-                >城市列表</NavBar>
+                >城市列表</NavBar> */}
+                <NavHeader>城市列表</NavHeader>
 
                 {/* AutoSizer作用是可以拿到页面的全部宽度和全部高度 通过render-props 渲染 结构height width */}
                 <AutoSizer>

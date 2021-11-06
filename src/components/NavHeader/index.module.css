@@ -1,0 +1,9 @@
+.navHeader {
+    margin-top: -45px;
+}
+.navHeader :global(.am-navbar-title){
+    font-size: 14px;
+}
+.navHeader :global(.am-navbar-left ){
+    color: black;
+}

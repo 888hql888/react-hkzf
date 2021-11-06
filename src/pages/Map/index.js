@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import  './index.scss'
 import {BaiduMapInit} from '@/utils/Bdmap'
+import NavHeader from '@/components/NavHeader'
+
 export default class Map extends Component {
     componentDidMount(){
         BaiduMapInit().then(BMap=>{
@@ -13,6 +15,7 @@ export default class Map extends Component {
     render() {
         return (
             <div className='map'>
+                <NavHeader>地图找房</NavHeader>
                     <div id='container'></div>
             </div>
         )
