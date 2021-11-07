@@ -50,7 +50,7 @@ export default class Index extends Component {
         swiperArr: [],
         groups: [],
         news: [],
-        curCityName: ""
+        cityName:{}
     }
     async getSweipers() {
         const res = await axios.get('http://localhost:8080/home/swiper')
@@ -125,7 +125,7 @@ export default class Index extends Component {
     renderNavs() {
         //千万要记得  遍历返回标签要记得 return !!!!
         return navs.map(item =>
-            <Flex.Item onClick={() => { this.props.history.push(item.path) }}>
+            <Flex.Item onClick={() => { this.props.history.push(item.path) }} key={item.title}>
                 <img
                     src={item.img}
                     alt=""
@@ -140,21 +140,22 @@ export default class Index extends Component {
         //获取定位城市 如果查询不匹配接口会返回 上海
         getCityLocation().then(res => {
             this.setState({
-                curCityName:res.label
+                cityName:res
             })
         }).catch(err=>{
             console.log(err,'err')
         })
     }
+
     componentDidMount() {
         this.getSweipers()
         this.getGroups()
         this.getNews()
         this.getLocalCity()
-        
-
     }
     render() {
+        // 数据改变 render会执行多次
+        const {cityName} = this.state
         return (
             <div className='index'>
 
@@ -178,7 +179,7 @@ export default class Index extends Component {
                                 className="location"
                                 onClick={() => this.props.history.push('/citylist')}
                             >
-                                <span className="name">{this.state.curCityName}</span>
+                                <span className="name">{cityName.label}</span>
                                 <i className="iconfont icon-arrow" />
                             </div>
 

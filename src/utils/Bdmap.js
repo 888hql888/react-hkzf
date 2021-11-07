@@ -29,8 +29,9 @@ export const getCityLocation = () => {
                         const result = await axios.get(
                             `http://localhost:8080/area/info?name=${res.name}`
                         )
+                        // console.log(result,'result...')
                         if (result.data.status === 200) {
-                            resolve(result.data.body.label)
+                            resolve(result.data.body)
                             localStorage.setItem('hkzf_city',JSON.stringify(result.data.body))
                         }
                     })
