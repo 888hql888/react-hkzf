@@ -12,6 +12,7 @@ import Nav4 from '@/assets/images/nav-4.png'
 
 // 导入样式文件
 import './index.scss'
+import SearchHeader from '../../components/SearchHeader';
 import {getCityLocation} from '@/utils/Bdmap'
 
 // 导航菜单数据
@@ -171,36 +172,10 @@ export default class Index extends Component {
                             {this.renderSwiper()}
                         </Carousel> : ''
                     }
-                    <Flex className="search-box">
-                        {/* 左侧白色区域 */}
-                        <Flex className="search">
-                            {/* 位置 */}
-                            <div
-                                className="location"
-                                onClick={() => this.props.history.push('/citylist')}
-                            >
-                                <span className="name">{cityName.label}</span>
-                                <i className="iconfont icon-arrow" />
-                            </div>
-
-                            {/* 搜索表单 */}
-                            <div
-                                className="form"
-                                onClick={() => this.props.history.push('/search')}
-                            >
-                                <i className="iconfont icon-seach" />
-                                <span className="text">请输入小区或地址</span>
-                            </div>
-                        </Flex>
-                        {/* 右侧地图图标 */}
-                        <i
-                            className="iconfont icon-map"
-                            onClick={() => this.props.history.push('/map')}
-                        />
-                    </Flex>
+                    
                 </div>
                 {/* 轮播图 end*/}
-
+                    <SearchHeader cityName={cityName.label}></SearchHeader>
                 {/* item 导航跳转区域 start*/}
                 <Flex className='Nav'>
                     {this.renderNavs()}

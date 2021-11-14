@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import './index.css'
 import List from '../List'
 import News from '../News'
 import Profile from '../Profile'
@@ -7,7 +7,7 @@ import Index from '../Index'
 import { TabBar } from 'antd-mobile';
 import { Route } from 'react-router';
 
-import './index.css'
+// import './index.css'
 
 export default class Home extends Component {
 
