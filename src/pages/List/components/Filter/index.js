@@ -5,7 +5,7 @@ import FilterPicker from "../FilterPicker";
 import FilterMore from "../FilterMore";
 
 import styles from "./index.module.css";
-import {API} from "@/utils/api.js"
+import { API } from "@/utils/api.js";
 import axios from "axios";
 export default class Filter extends Component {
   state = {
@@ -16,11 +16,25 @@ export default class Filter extends Component {
       more: false,
     },
     titleType: "", //控制过滤picker组件的展示
-    titleArr: ["area", "mode", "price"],
-    filtersData:[]
+    //回显选中的值.绑定到每一个区域上.默认是null，选中后是一个数组.(做法和教程的不一样.)
+    titleArr: [
+      {
+      key:"area",
+      seletedValue:null
+    },
+    {
+      key:"mode",
+      seletedValue:null
+    },
+    {
+      key:"price",
+      seletedValue:null
+    }
+  ],
+    filtersData: [],
   };
-  componentDidMount(){
-    this.getFiltersData()
+  componentDidMount() {
+    this.getFiltersData();
   }
   // !注意使用赋值的方式 避免this指向有问题
   handleTitleStatus = (type) => {
@@ -32,32 +46,43 @@ export default class Filter extends Component {
     });
   };
   renderFilterPicker() {
-    const { titleType, titleArr,filtersData} = this.state;
-    const { area, subway, rentType, price } = filtersData
+    const { titleType, titleArr, filtersData } = this.state;
+    const { area, subway, rentType, price } = filtersData;
     // 根据 openType 来拿到当前筛选条件数据
-    let data = []
-    let cols = 3
+    let data = [];
+    let cols = 3;
+    //组装数据 picker 接收 [[],[]] 多个数组 数组有嵌套使用 children 实现多级结构
     switch (titleType) {
-      case 'area':
+      case "area":
         // 获取到区域数据
-        data = [area, subway]
-        cols = 3
-        break
-      case 'mode':
-        data = rentType
-        cols = 1
-        break
-      case 'price':
-        data = price
-        cols = 1
-        break
+        data = [area, subway];
+        cols = 3;
+        break;
+      case "mode":
+        data = rentType;
+        cols = 1;
+        break;
+      case "price":
+        data = price;
+        cols = 1;
+        break;
       default:
-        break
+        break;
     }
-    return titleArr.includes(titleType) ? (
-      // 将事件onCancel和onOk 当属性传递给子组件 子组件通过回调方式调用父组件的事件
-      <FilterPicker onCancel={this.onCancel} onOk={this.onOk} data={data} cols={cols}/>
-    ) : null;
+      return titleArr.map(item => {if(item.key==titleType){ 
+        return(
+          <FilterPicker
+        onCancel={this.onCancel}
+        onOk={this.onOk}
+        data={data}
+        cols={cols}
+        titleType={titleType}
+        titleArr={titleArr}
+        pickerChange={this.pickerChange}
+        key={item.value}
+      />
+        )
+      } else return null})
   }
   // picker取消 注意 this指向问题
   onCancel = () => {
@@ -70,30 +95,43 @@ export default class Filter extends Component {
     this.setState({
       titleType: "",
     });
+  };
+  // picer组件的onChange事件
+  pickerChange = (val) => {
+    console.log(val,'change val');
+    const {titleArr,titleType} = this.state
+    titleArr.map(item => {if(item.key==titleType){item.seletedValue = val}})
+    this.setState({
+      titleArr
+    })
   }
   // 封装获取所有筛选条件的方法
   async getFiltersData() {
     // 获取当前定位城市id
-    const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
-    const res = await API.get(`/houses/condition?id=${value}`)
+    const { value } = JSON.parse(localStorage.getItem("hkzf_city"));
+    const res = await API.get(`/houses/condition?id=${value}`);
     this.setState({
-      filtersData: res.data.body
-    })
+      filtersData: res.data.body,
+    });
   }
   render() {
     const { titleStatus, titleArr, titleType } = this.state;
+    console.log('执行次数...');
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
-        {titleArr.includes(titleType) ? (
+        {/* {titleArr.includes(titleType) ? (
           <div className={styles.mask} onClick={this.onCancel} />
-        ) : null}
+        ) : null} */}
+        {
+          titleArr.map(item => {if(item.key==titleType){ return  <div className={styles.mask} onClick={this.onCancel} />} else return null})
+        }
         <div className={styles.content}>
           {/* 标题栏 */}
           <FilterTitle
-            titleStatus={titleStatus}
-            onClick={this.handleTitleStatus}
-            city
+            titleType={titleType}
+            titleArr={titleArr}
+            handleTitleStatus={this.handleTitleStatus}
           />
 
           {/* 区域 方式 租金前三个标题 对应组件 */}

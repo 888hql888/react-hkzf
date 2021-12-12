@@ -176,7 +176,7 @@ export default class Map extends Component {
     // 创建小区覆盖物
     createRect(areaName, count, areaPoint, value) {
         // 创建覆盖物
-        const label = new BMap.Label('', {
+        const label = new window.BMap.Label('', {
             position: areaPoint,
             offset: new BMap.Size(-50, -28)
         })
