@@ -29,15 +29,22 @@ export default class Filter extends Component {
     {
       key:"price",
       seletedValue:null
+    },
+    {
+      key:"more",
+      seletedValue:['more']
     }
   ],
+    moreData:[],
     filtersData: [],
+    moreSeletedArr:[] // more存储选中数据
   };
   componentDidMount() {
     this.getFiltersData();
   }
   // !注意使用赋值的方式 避免this指向有问题
   handleTitleStatus = (type) => {
+    console.log(type,'type..');
     const { titleStatus } = this.state;
     titleStatus[type] = !titleStatus[type];
     this.setState({
@@ -69,7 +76,7 @@ export default class Filter extends Component {
       default:
         break;
     }
-      return titleArr.map(item => {if(item.key==titleType){ 
+      return titleArr.map(item => {if(item.key==titleType && item.key!=='more'){ 
         return(
           <FilterPicker
         onCancel={this.onCancel}
@@ -88,12 +95,14 @@ export default class Filter extends Component {
   onCancel = () => {
     this.setState({
       titleType: "",
+      moreSeletedArr:[]
     });
   };
   // picker确定
-  onOk = () => {
+  onOk = (moreSeletedArr) => {
     this.setState({
       titleType: "",
+      moreSeletedArr
     });
   };
   // picer组件的onChange事件
@@ -115,16 +124,13 @@ export default class Filter extends Component {
     });
   }
   render() {
-    const { titleStatus, titleArr, titleType } = this.state;
+    const { titleStatus, titleArr, titleType,filtersData,moreSeletedArr} = this.state;
     console.log('执行次数...');
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
-        {/* {titleArr.includes(titleType) ? (
-          <div className={styles.mask} onClick={this.onCancel} />
-        ) : null} */}
         {
-          titleArr.map(item => {if(item.key==titleType){ return  <div className={styles.mask} onClick={this.onCancel} />} else return null})
+          titleArr.map(item => {if(item.key==titleType && item.key!=='more'){ return  <div className={styles.mask} onClick={this.onCancel} />} else return null})
         }
         <div className={styles.content}>
           {/* 标题栏 */}
@@ -138,7 +144,9 @@ export default class Filter extends Component {
           {this.renderFilterPicker()}
 
           {/* 筛选标题 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {
+            titleType ==='more' ? <FilterMore filtersData={filtersData} onCancel={this.onCancel} onOk={this.onOk} moreSeletedArr={moreSeletedArr} /> : null
+          }
         </div>
       </div>
     );

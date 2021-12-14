@@ -41,9 +41,11 @@ export default class FilterTitle extends Component {
   // 只有选中有值(如果是三项则必须三项都必须有值.)的title 才允许高亮.
   handleIsSeleted = (type) => {
     const {titleType,titleArr} = this.props
+    // if(type==='more') return true
     if(type === titleType ){
       let targetObj = titleArr.filter(item => {return item.key === titleType})
       targetObj = targetObj[0]
+      console.log(targetObj,'targetObj...');
       if(targetObj.seletedValue!==null && !targetObj.seletedValue.includes('null')){
         return true
       }else return false

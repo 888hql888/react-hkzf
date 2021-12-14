@@ -19,7 +19,7 @@
   right: 0;
   bottom: 0;
   overflow: auto;
-  padding-bottom: 50px;
+  padding-bottom: 100px;
   z-index: 3;
   background-color: #fff;
 }
@@ -65,7 +65,7 @@
   position: fixed;
   left: 80px;
   right: 0;
-  bottom: 0;
+  bottom: 50px;
   background-color: #fff;
   z-index: 3;
 }
